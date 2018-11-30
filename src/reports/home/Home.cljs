@@ -1,7 +1,7 @@
 (ns reports.home.Home
   (:require
    [rum.core :as rum]
-   [reports.home.state :as state]))
+   [reports.home.State :as state]))
 
 (rum/defc Home []
   [:footer

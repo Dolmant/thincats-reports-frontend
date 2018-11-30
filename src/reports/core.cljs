@@ -3,12 +3,12 @@
   (:require   [rum.core :as rum]
               [reports.wrappers.ui :as ui]
               [reports.wrappers.ic :as ic]
-              [reports.App :as App]))
+              [reports.home.Home :as Home]))
 
 (enable-console-print!)
 
 (rum/defc home-page < rum/reactive []
-  [:div (App/App)])
+  [:div (Home/Home)])
 (defonce sheetsManager (js/Map.))
 
 (rum/defc current-page []
@@ -18,9 +18,7 @@
 
 (defn mountRoot []
   (def targetElement (.getElementById js/document "app"))
-  (if (.hasChildNodes targetElement)
-    (do (js/console.log "hydrated") (rum/hydrate (current-page) targetElement) (waitForImages true))
-    (do (js/console.log "rendered") (rum/mount (current-page) targetElement) (waitForImages false))))
+  (do (js/console.log "rendered") (rum/mount (current-page) targetElement)))
 
 (defn reload! []
   (mountRoot))
