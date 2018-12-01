@@ -27,4 +27,11 @@
                                      :rename-prefix-namespace "REPORTS"}}
         :devtools {:after-load reports.core/reload!
                    :http-root "dist"
-                   :http-port 8081}}}}
+                   :http-port 8081}}
+  :prerender {:target :node-script
+              :output-to "prerender.js"
+              :main reports.prerender/prerender
+              :devtools {:after-load reports.prerender/prerender}
+              :release {:compiler-options {:optimizations :simple}}
+              :dev {:closure-defines {reports.prerender/DEV true}}
+              :modules {:main {:entries [reports.prerender]}}}}}

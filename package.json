@@ -7,8 +7,11 @@
         "lib": "lib"
     },
     "scripts": {
-        "build": "shadow-cljs release app && sass src/reports/scss/style.scss:dist/styles.css --no-source-map",
+        "build": "shadow-cljs release app && npm run buildCSS && npm run buildHTML && node ./prerender.js",
         "watch": "shadow-cljs watch app",
+        "watchP": "shadow-cljs watch prerender",
+        "buildHTML": "shadow-cljs release prerender",
+        "buildCSS": "sass src/reports/scss/style.scss:dist/styles.css --no-source-map",
         "report": "shadow-cljs run shadow.cljs.build-report app report.html",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

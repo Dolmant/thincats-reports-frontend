@@ -2,7 +2,7 @@
   (:require [rum.core :as rum]
             [clojure.string :as str]))
 
-(rum/defc Template [appInstance css jsmap]
+(rum/defc Template [css jsmap]
   (rum/defc cssSheet [href] [:link {:rel "stylesheet" :href href}])
   (rum/defc jsImport [src] [:script {:defer true :src src}])
   (def cssTemplate (map cssSheet css))
@@ -21,4 +21,4 @@
     [:title "ThinCats Admin Reporting"]]
    [:body {:id "body" :style {:padding-right "0px !important"}}
     [:div#loading]
-    [:div#app (appInstance)]]])
+    [:div#app]]])

@@ -1,4 +1,4 @@
-(ns reports.rum-adaptor-macro
+(ns reports.rum-adaptor
   (:require
    [clojure.string :as str]))
 

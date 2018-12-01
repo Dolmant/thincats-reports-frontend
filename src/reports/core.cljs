@@ -1,20 +1,19 @@
 (ns reports.core
-  (:require-macros [reports.rum-adaptor-macro])
   (:require   [rum.core :as rum]
               [reports.wrappers.ui :as ui]
-              [reports.wrappers.ic :as ic]
-              [reports.home.Home :as Home]))
+              [reports.State :as State]
+              [reports.pages.Home :as Home]
+              [reports.pages.Auth :as Auth]))
 
 (enable-console-print!)
 
-(rum/defc home-page < rum/reactive []
-  [:div (Home/Home)])
-(defonce sheetsManager (js/Map.))
 
-(rum/defc current-page []
-  (ui/get-jss (ui/mui-theme-provider
-               {:theme (ui/get-mui-theme) :sheetsManager sheetsManager}
-               (home-page))))
+(rum/defc current-page < rum/reactive []
+  (ui/MuiThemeProvider
+   {:theme (ui/get-mui-theme)}
+   (case ((rum/react State/State) :page)
+     :home (Home/Home)
+     :auth (Auth/Auth))))
 
 (defn mountRoot []
   (def targetElement (.getElementById js/document "app"))
