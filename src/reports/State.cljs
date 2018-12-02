@@ -43,7 +43,7 @@
   (SetAttr :error error))
 
 (defn GetReport [report]
-  (go (let [response (<! (http/get (str/join "" ["http://35.201.25.102:8079/report/" report])
+  (go (let [response (<! (http/get (str/join "" ["https://thincats-reports-api.storm-analytiks.com/report/" report])
                                    {:with-credentials? false :basic-auth (@State :creds)}))]
         (if (:success response)
           (do
@@ -54,14 +54,14 @@
           (SetError "Failed to load report")))))
 
 (defn GetInvestors []
-  (go (let [response (<! (http/get "http://35.201.25.102:8079/investors"
+  (go (let [response (<! (http/get "https://thincats-reports-api.storm-analytiks.com/investors"
                                    {:with-credentials? false :basic-auth (@State :creds)}))]
         (if (:success response)
           (SetInvestors (response :body))
           (SetError "Failed to load data")))))
 
 (defn Login [data]
-  (go (let [response (<! (http/get "http://35.201.25.102:8079/loans"
+  (go (let [response (<! (http/get "https://thincats-reports-api.storm-analytiks.com/loans"
                                    {:with-credentials? false :basic-auth {:username (.get data "user") :password (.get data "pass")}}))]
         (if (:success response)
           (do (SetPage :home)
