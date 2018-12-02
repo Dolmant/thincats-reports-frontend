@@ -9,7 +9,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce State
-  (atom {:page :home}))
+  (atom {:page :auth}))
 
 (defn update-vals [map mf]
   (reduce #(update-in % [%2] (fn [_] (mf %2))) map (keys mf)))
@@ -43,24 +43,29 @@
   (SetAttr :error error))
 
 (defn GetReport [report]
-  (go (let [response (<! (http/post (str/join "" ["https://todo investors/" report])
-                                    {:basic-auth (@State :creds)}))]
-        (if (not (:success response))
+  (go (let [response (<! (http/get (str/join "" ["http://35.201.25.102:8079/report/" report])
+                                   {:with-credentials? false :basic-auth (@State :creds)}))]
+        (if (:success response)
+          (do
+            (def link (.createElement js/document "a"))
+            (.setAttribute link "href" (.createObjectURL js/window.URL (js/window.Blob. [(response :body)])))
+            (.setAttribute link "download" (str/join "" [report ".csv"]))
+            (.click link))
           (SetError "Failed to load report")))))
 
 (defn GetInvestors []
-  (go (let [response (<! (http/post "https://todo investors"
-                                    {:basic-auth (@State :creds)}))]
+  (go (let [response (<! (http/get "http://35.201.25.102:8079/investors"
+                                   {:with-credentials? false :basic-auth (@State :creds)}))]
         (if (:success response)
           (SetInvestors (response :body))
           (SetError "Failed to load data")))))
 
 (defn Login [data]
-  (go (let [response (<! (http/post "https://todo loans"
-                                    {:basic-auth {:username "hello" :password "world"}}))]
+  (go (let [response (<! (http/get "http://35.201.25.102:8079/loans"
+                                   {:with-credentials? false :basic-auth {:username (.get data "user") :password (.get data "pass")}}))]
         (if (:success response)
           (do (SetPage :home)
-              (SetCreds data)
+              (SetCreds {:username (.get data "user") :password (.get data "pass")})
               (SetLoans (response :body))
               (GetInvestors))
           (SetError "Failed to login")))))

@@ -5,13 +5,17 @@
    [reports.State :as State]))
 
 (rum/defc Auth < rum/reactive []
-  [:form#login
-   [:label {:for "pass"} "Password"]
-   [:input {:name "pass" :placeholder "Enter Password" :type "password"}]
-   [:label {:for "user"} "Admin Username"]
-   [:input {:name "user" :placeholder "Enter Username"}]
-   [:button {:on-click (fn [e]
-                         (def targetElement (.getElementById js/document "login"))
-                         (def data (.FormData js/document targetElement))
-                         (State/Login data))}]]
-  [:div.error ((rum/react State/State) :error)])
+  [:div.auth
+   [:form#login
+    [:div
+     [:label {:for "user"} "Admin Username"]
+     [:input {:name "user" :placeholder "Enter Username"}]]
+    [:div
+     [:label {:for "pass"} "Password"]
+     [:input {:name "pass" :placeholder "Enter Password" :type "password"}]]]
+
+   (ui/Button {:variant "contained" :on-click (fn [e]
+                                                (def targetElement (.getElementById js/document "login"))
+                                                (def data (js/window.FormData. targetElement))
+                                                (State/Login data))} "Submit")
+   [:div.error ((rum/react State/State) :error)]])

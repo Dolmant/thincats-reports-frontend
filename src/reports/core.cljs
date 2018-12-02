@@ -17,7 +17,8 @@
 
 (defn mountRoot []
   (def targetElement (.getElementById js/document "app"))
-  (do (js/console.log "rendered") (rum/mount (current-page) targetElement)))
+  (rum/mount (current-page) targetElement)
+  (js/console.log "rendered"))
 
 (defn reload! []
   (mountRoot))
